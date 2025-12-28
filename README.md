@@ -16,8 +16,6 @@ A fault-tolerant data processing system that ingests unreliable events from mult
 ### Backend
 - Node.js
 - Express.js
-- MongoDB
-- Mongoose
 
 ### Frontend
 - React
@@ -28,32 +26,14 @@ A fault-tolerant data processing system that ingests unreliable events from mult
 
 ```
 EventIngestionSystem/
-├── server.js                 # Main server file
-├── models/
-│   ├── Event.js             # Event schema
-│   └── DeduplicationRecord.js  # Deduplication tracking
-├── services/
-│   ├── normalizationService.js  # Event normalization logic
-│   ├── deduplicationService.js  # Idempotency logic
-│   └── eventProcessingService.js # Main event processing
-├── routes/
-│   ├── events.js            # Event ingestion endpoints
-│   └── aggregation.js       # Aggregation endpoints
-├── client/
-│   ├── src/
-│   │   ├── App.js          # Main React component
-│   │   ├── index.js        # React entry point
-│   │   └── index.css       # Styles
-│   └── public/
-│       └── index.html      # HTML template
-└── README.md
+<img width="304" height="398" alt="image" src="https://github.com/user-attachments/assets/36fd8549-82e8-4f6d-bd45-4cba027415c4" />
+
 ```
 
 ## Setup Instructions
 
 ### Prerequisites
 - Node.js (v14 or higher)
-- MongoDB (running locally or remote instance)
 
 ### Installation
 
@@ -68,27 +48,14 @@ cd client
 npm install
 cd ..
 ```
-
-3. **Configure environment variables:**
-Create a `.env` file in the root directory:
-```
-MONGODB_URI=mongodb://localhost:27017/eventIngestion
-PORT=5000
-```
-
-4. **Start MongoDB** (if running locally):
-```bash
-mongod
-```
-
-5. **Start the backend server:**
+3. **Start the backend server:**
 ```bash
 npm start
 # or for development with auto-reload:
 npm run dev
 ```
 
-6. **Start the frontend** (in a new terminal):
+4. **Start the frontend** (in a new terminal):
 ```bash
 npm run client
 # or:
@@ -98,6 +65,10 @@ cd client && npm start
 The application will be available at:
 - Backend API: `http://localhost:5000`
 - Frontend UI: `http://localhost:3000`
+
+## **Screenshot**
+<img width="1366" height="690" alt="image" src="https://github.com/user-attachments/assets/1d0889ce-1d04-4a03-9685-f4292bbadfef" />
+<img width="1366" height="691" alt="image" src="https://github.com/user-attachments/assets/4f7d998f-6d9d-4ea8-b8cf-6cf1b4c87410" />
 
 ## API Endpoints
 
@@ -217,38 +188,32 @@ Get aggregated metrics.
 
 **Bottlenecks identified:**
 
-1. **Database Write Throughput**
-   - Single MongoDB instance will become a bottleneck
-   - Multiple unique indexes (eventHash, clientId+timestamp) increase write overhead
-   - Solution: Sharding, read replicas, connection pooling
-
-2. **Hash Collision Checks**
+1. **Hash Collision Checks**
    - Sequential duplicate checks for each event add latency
    - At high volume, checking deduplication records becomes expensive
    - Solution: In-memory cache (Redis) for recent hashes, batch operations
 
-3. **Normalization Complexity**
+2. **Normalization Complexity**
    - Multiple field name checks per event increase CPU usage
    - Solution: Pre-compile field mappings, use more efficient parsing
 
-4. **Memory Usage**
+3. **Memory Usage**
    - Storing original payloads increases storage requirements
    - Large number of events in memory during aggregation
    - Solution: Archive old events, pagination, streaming aggregation
 
-5. **Network & API Limits**
+4. **Network & API Limits**
    - Single Express server will hit connection limits
    - No rate limiting currently
    - Solution: Load balancers, API gateway, rate limiting middleware
 
-6. **Frontend Performance**
+5. **Frontend Performance**
    - Loading all events into UI will become slow
    - Solution: Pagination, virtual scrolling, server-side filtering
 
 **Scalability Improvements:**
 - Add Redis for caching and distributed locking
 - Implement message queue (RabbitMQ/Kafka) for async processing
-- Database sharding by clientId or time ranges
 - Separate read/write databases
 - Add connection pooling and database connection limits
 - Implement batch processing for high-volume ingestion
