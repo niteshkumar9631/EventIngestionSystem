@@ -1,0 +1,33 @@
+[
+  {
+    "source": "client_A",
+    "payload": {
+      "metric": "purchase",
+      "amount": "1200",
+      "timestamp": "2024/01/01"
+    }
+  },
+  {
+    "client_id": "client_B",
+    "event_type": "click",
+    "value": 500,
+    "date": "2024-01-15T10:30:00Z"
+  },
+  {
+    "origin": "client_C",
+    "payload": {
+      "type": "view",
+      "price": 99.99,
+      "created_at": "2024-01-20"
+    }
+  },
+  {
+    "source": "client_A",
+    "payload": {
+      "metric": "purchase",
+      "amount": "1200",
+      "timestamp": "2024/01/01"
+    }
+  }
+]
+
